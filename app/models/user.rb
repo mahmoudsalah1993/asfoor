@@ -29,10 +29,9 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }, allow_blank: true
   validates :last_name, presence: true
   validates :birthdate, presence: true
+
   mount_uploader :profile_picture, PictureUploader
   validate :picture_size
-
-  
   # Returns the hash digest of the given string
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -65,8 +64,13 @@ class User < ActiveRecord::Base
   def feed
     following_ids = "SELECT followed_id FROM relationships
                      WHERE  follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
+    feeds = Micropost.where("user_id IN (#{following_ids})
                      OR user_id = :user_id", user_id: id)
+    public_feed = Micropost.where(is_private: false)
+    t = Micropost.where(:id => (feeds + public_feed))
+  end
+  def publicfeed
+    feed = microposts.where(is_private: false)
   end
 
   # Follows a user
@@ -100,6 +104,7 @@ class User < ActiveRecord::Base
   def requesting?(other_user)
     requesting.include?(other_user)
   end
+
 private
 
     # Validates the size of an uploaded picture
@@ -108,4 +113,5 @@ private
         errors.add(:picture, "should be less than 5MB")
       end
     end
+
 end

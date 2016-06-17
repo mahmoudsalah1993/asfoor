@@ -20,11 +20,6 @@ class UsersController < ApplicationController
 
   def create 
     @user = User.new(user_params)
-    # if (@user.gender == "male")
-    #   @user.profile_picture = "/public/male_default.png"
-    # else
-    #    @user.profile_picture = "/public/female_default.jpg"
-    # end
     if @user.save
       log_in @user
       flash[:success] = "Welcome the Asfoor!"
@@ -97,6 +92,7 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password,:password_confirmation,
                       :last_name,:phone,:gender,:birthdate,:hometown,:about_me,:marital_status,
                       :profile_picture)
+
     end
 
     def correct_user

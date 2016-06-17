@@ -16,7 +16,11 @@
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
       <ol class="microposts">
+      <% if current_user.following?(@user)%>
         <%= render @microposts %>
+      <%else%>
+         <%= render @user.publicfeed %>
+      <%end%>
       </ol>
       <%= will_paginate @microposts %>
     <% end %>
