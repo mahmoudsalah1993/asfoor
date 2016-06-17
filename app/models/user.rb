@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, length: { minimum: 6 }, allow_blank: true
-  validates :last, presence: true
+  validates :last_name, presence: true
   validates :birthdate, presence: true
   # Returns the hash digest of the given string
   def User.digest(string)
@@ -61,18 +61,14 @@ class User < ActiveRecord::Base
   def feed
     following_ids = "SELECT followed_id FROM relationships
                      WHERE  follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
+    feeds = Micropost.where("user_id IN (#{following_ids})
                      OR user_id = :user_id", user_id: id)
+    public_feed = Micropost.where(is_private: false)
+    t = Micropost.where(:id => (feeds + public_feed))
   end
-
-    def all_feed
-      following_ids = "SELECT followed_id FROM relationships
-                       WHERE  follower_id = :user_id"
-
-      feeds = Micropost.where("user_id IN (#{following_ids})
-                       OR user_id = :user_id", user_id: id)
-      all_feeds = Micropost.where("is_private = false").all - feeds
-    end
+  def publicfeed
+    feed = microposts.where(is_private: false)
+  end
 
   # Follows a user
   def follow(other_user)
