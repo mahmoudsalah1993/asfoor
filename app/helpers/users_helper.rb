@@ -5,14 +5,14 @@ module UsersHelper
     gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
     size = options[:size]
 	#gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
-	if current_user.profile_picture?
+	if user.profile_picture?
 		gravatar_url = current_user.profile_picture.url
-	elsif (current_user.gender == "Male")
+	elsif (user.gender == "Male")
       gravatar_url = "/male_default.png"
     else
       gravatar_url = "/female_default.jpg"
     end
-    image_tag(gravatar_url, alt: user.name, class: "gravatar")
+    image_tag(gravatar_url, alt: user.name,size: "50x50", class: "gravatar")
   end
 end
 
