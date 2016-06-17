@@ -1,0 +1,15 @@
+one:
+  follower: michael
+  followed: Gaber
+
+two:
+  follower: Gaber
+  followed: mallory
+
+three:
+  follower: Gaber
+  followed: michael
+
+four:
+  follower: archer
+  followed: Gaber

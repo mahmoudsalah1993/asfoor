@@ -1,0 +1,31 @@
+<% @user ||= current_user %>
+<div class="stats">
+  <a href="<%= following_user_path(@user) %>">
+    <strong id="following" class="stat">
+      <%= @user.following.count %>
+    </strong>
+    Friend
+  </a>
+  <br>
+  <br>
+  email:
+  <%= @user.email%>
+  <br>
+  Phone:
+  <%= @user.phone%>
+  <br>
+  Gender:
+  <%= @user.gender%>
+  <br>
+  Hometown:
+  <%= @user.hometown%>
+
+  <% if current_user.following?(@user)%>
+    <br>
+    Birthdate:
+    <%= @user.birthdate%>
+    <br>
+    About me:
+    <%= @user.about_me%>
+  <%end%>
+</div>
